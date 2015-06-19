@@ -19,6 +19,8 @@
 
 ## You might need to set the path manually here, i.e.
 RESOLVCONF=/usr/bin/resolvconf
+DEFAULTNS='192.168.1.1'
+DEFAULTDEV='eth0'
 
 case $script_type in
 
@@ -53,9 +55,11 @@ up)
 "
   done
   #echo -n "$R" | $RESOLVCONF -p -a "${dev}"
+  $RESOLVCONF -d "${DEFAULTDEV}.inet"
   echo -n "$R" | $RESOLVCONF -a "${dev}.inet"
   ;;
 down)
   $RESOLVCONF -d "${dev}.inet"
+  echo -n "nameserver $DEFAULTNS" | $RESOLVCONF -a "${DEFAULTDEV}.inet"
   ;;
 esac
